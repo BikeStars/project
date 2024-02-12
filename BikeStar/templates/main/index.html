@@ -1,0 +1,334 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+{% block title %}
+Главная
+{% endblock %}
+
+{% block content %}
+<style type="text/css">      
+html,
+body,
+#container { 
+  width: 100%; 
+  height: 100%; 
+  margin: 0;
+  padding: 0; 
+  display: inline-block;
+}
+.container1 {  
+  display: inline-block;
+}
+.table1 {
+  th {
+    border: 1px solid rgb(168, 166, 166);
+    padding: 5px 5px;
+  }
+
+  td {
+    text-align: center;
+    font-size: 20px;
+    font-family: Trebuchet;
+    border: 1px solid rgb(168, 166, 166);
+    padding: 5px 5px;
+  }
+}
+.rectangle-1 {
+  background-color: rgba(0, 98, 255, 0.4);
+  height: 40px;
+  width: 40px;
+}
+.rectangle-2 {
+  background-color: rgba(0, 98, 255, 0.4);
+  height: 40px;
+  width: 200px;
+}
+</style>
+<ul class="nav nav-pills sticky-top bg-white nav-fill">
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="{% url 'main_page' %}">
+      <span style="font-weight: bold;">Главная</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'main_post' %}">
+      <span style="font-weight: bold;">Создать маршрут</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="http://127.0.0.1:8000/admin">
+      <span style="font-weight: bold;">Админ-панель</span>
+    </a>
+  </li>
+{% if not user.is_authenticated %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'register' %}">
+      <span style="font-weight: bold;">Регистрация</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'login' %}">
+      <span style="font-weight: bold;">Войти</span>
+    </a>
+  </li>
+  {% else %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'profile' %}">
+      <span style="font-weight: bold;">Профиль</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'logout' %}">
+      <span style="font-weight: bold;">Выйти</span>
+    </a>
+  </li>
+  {% endif %}
+</ul>
+
+<h1><span style="font-family: Impact; color:  rgb(3, 79, 201);">Статистика и рекомендации от ВелоStar</span></h1>
+
+{% if user.is_authenticated %}
+<div align="center">
+<table width="95%">
+  <tr >
+    <td  width="50%">
+      <div class="container">
+        <table border="2" width="100%">
+           <tr class = "table1">
+             <td>дата</td>
+             <td>дистанция</td>
+             <td>расчётная сложность</td>
+             <td>реальная сложность</td>
+             <td>мин. пульс</td>
+             <td>макс. пульс</td>
+             <td>ср. пульс</td>
+           </tr>
+           {% for rou in routes %}
+           {% if user == rou.user %}
+             <tr  class = "table1">
+               <td>
+                 <script type="text/javascript">
+                   var datem = "{{ rou.created_at }}";
+                   document.write(datem.slice(0,-7))
+                 </script>
+               </td>
+               <td>{% if rou.distance %} {{ rou.distance }} {% else %} 1.5 {% endif %} км </td>
+               <td>
+                 {% if rou.distance %}
+                 <script type="text/javascript">
+                 if ({{ rou.distance }}<=2){
+                 document.write("лёгкий");}
+                 if ({{ rou.distance }}<=4.5 & {{ rou.distance }}>2){
+                 document.write("средний");}
+                 if ({{ rou.distance }}>4.5){
+                 document.write("сложный");}
+                 </script>
+                 {% else %} лёгкий {% endif %}
+               </td>
+               <td>
+                 {% if rou.pulsemid %}
+                 <script type="text/javascript">
+                 if ({{ rou.pulsemid }}<=110){
+                 document.write("лёгкий");}
+                 if ({{ rou.pulsemid }}<=130 & {{ rou.pulsemid }}>110){
+                 document.write("средний");}
+                 if ({{ rou.pulsemid }}>130){
+                 document.write("сложный");}
+                 </script> 
+                 {% else %} средний {% endif %}
+               </td>
+                 <td>{% if rou.pulsemin %} {{ rou.pulsemin }} {% else %} 61 {% endif %}</td>
+		 <td>{% if rou.pulsemax %} {{ rou.pulsemax }} {% else %} 169 {% endif %}</td>
+		 <td>{% if rou.distance %} {{ rou.pulsemid }} {% else %} 115 {% endif %}</td>
+             </tr>
+           {% endif %}
+           {% endfor %}
+         </table>
+      </div>
+      <script type="text/javascript">
+        let alldist = 0;
+        let almdist = 0;
+        let allpulse = 0;
+        let almpulse = 0;
+      </script>
+        {% for rou in routes %}
+        {% if user == rou.user %}
+        <script type="text/javascript">
+        almdist = alldist;
+        alldist = alldist + {{ rou.distance }};
+        almpulse = allpulse;
+        allpulse = allpulse + {{ rou.pulsemid }};
+        </script>
+        {% endif %}
+        {% endfor %}
+        <p></p>
+        {% endif %}
+        {% if not user.is_authenticated %}
+        <br><br><br><br><br><br><br><br><br>
+        <h3 style="text-align: center;"><span style="font-family: Impact; color:  rgb(56, 79, 112); ">В настоящее время у вас отсутствуют маршруты. Зарегестрируйтесь на сайте, затем создайте свой первый маршрут.
+        {% else %}
+        <h3><span style="font-family: Impact; color:  rgb(65, 136, 249);">На основе пройденных вами маршрутов, мы советуем сделать ваш следующий маршрут
+        <script type="text/javascript">
+          
+        if (almdist<=4.5){
+        document.write("длиннее ")};
+        if (almdist>4.5){
+        document.write("короче ")};
+        if (almpulse<=130){
+        document.write("и сложнее")};
+        if (almpulse>130){
+        document.write("и легче")};
+        </script>
+        </span></h3>
+        {% endif %}
+    </td>
+    <td  width="30%">
+<div id="anychart-embed-N9y4hRkZ" class="anychart-embed anychart-embed-N9y4hRkZ">
+<script src="https://cdn.anychart.com/releases/8.11.0/js/anychart-base.min.js"></script>
+<div id="ac_style_N9y4hRkZ" style="display:none;">
+html,
+  body,
+  #container {
+    width: 10%;
+    height: 20%;
+    margin: 0;
+    padding: 0;
+  }
+</div>
+<script>(function(){
+function ac_add_to_head(el){
+	var head = document.getElementsByTagName('head')[0];
+	head.insertBefore(el,head.firstChild);
+}
+function ac_add_link(url){
+	var el = document.createElement('link');
+	el.rel='stylesheet';el.type='text/css';el.media='all';el.href=url;
+	ac_add_to_head(el);
+}
+function ac_add_style(css){
+	var ac_style = document.createElement('style');
+	if (ac_style.styleSheet) ac_style.styleSheet.cssText = css;
+	else ac_style.appendChild(document.createTextNode(css));
+	ac_add_to_head(ac_style);
+}
+
+ac_add_style(document.getElementById("ac_style_N9y4hRkZ").innerHTML);
+ac_add_style(".anychart-embed-N9y4hRkZ{width:600px;height:450px;}");
+})();</script>
+
+{% if user.is_authenticated %}
+<script type="text/javascript">
+let countroutes = 0;
+</script>
+{% for rou in routes %}
+<script type="text/javascript">
+countroutes = countroutes+1;
+</script>
+{% endfor %}
+
+<script type="text/javascript">
+if (countroutes>5){
+var seriesn = chart.column([
+["19.01.24", "3.5"],
+["20.01.24", "4.8"],
+["23.01.24", "1.7"],
+["24.01.24", "3.3"],
+["27.01.24", "2.9"],
+["12.02.24", "1.5"]])};
+if (countroutes==5){
+var seriesn = chart.column([
+["19.01.24", "3.5"],
+["20.01.24", "4.8"],
+["23.01.24", "1.7"],
+["24.01.24", "3.3"],
+["27.01.24", "2.9"]])};
+</script>
+
+<div id="container"></div>
+<script type="text/javascript">
+anychart.onDocumentReady(function () {
+  
+  // create a column chart
+  var chart = anychart.column();
+
+  // create a data series
+  var series = chart.column([
+  ["19.01.24", "3.5"],
+  ["20.01.24", "4.8"],
+  ["23.01.24", "1.7"],
+  ["24.01.24", "3.3"],
+  ["27.01.24", "2.9"],
+  ["12.02.24", "1.5"]]);
+
+  // add axis titles
+  chart.xAxis().title("Дата");
+  chart.yAxis().title("Дистанция");
+
+  // add a chart title
+  chart.title("Статистика маршрутов по дистанции");
+
+  // set the container element
+  chart.container("container");
+
+  // display the chart
+  chart.draw();
+  
+});
+</script>
+</div>
+    </td>
+  </tr>
+</table>
+</div>
+{% endif %}
+<br>
+{% if user.is_authenticated %}
+<h1><span style="font-family: Impact; color:  rgb(3, 79, 201);">Ваши маршруты:</span></h1>
+{% endif %}
+{% for rou in routes %}
+{% if user == rou.user %}
+  <div class="col">
+    {% if rou.pulsemid %}
+    <script type="text/javascript">
+      if ({{ rou.pulsemid }}<=110){
+      document.writeln('<div class="card mb-2" style="max-width: 1200px; margin-top: 20px; background-color: #92FF7F">');}
+      if ({{ rou.pulsemid }}<=130 & {{ rou.pulsemid }}>110){
+      document.writeln('<div class="card mb-2" style="max-width: 1200px; margin-top: 20px; background-color: #F7FF7F">');}
+      if ({{ rou.pulsemid }}>130){
+      document.writeln('<div class="card mb-2" style="max-width: 1200px; margin-top: 20px; background-color: #FF7F7F">');}
+    </script>
+    {% else %}
+    <div class="card mb-2" style="max-width: 1200px; margin-top: 20px; background-color: #F7FF7F">
+    {% endif %}
+      <div class="row g-0">
+        <div class="col-md-4">
+          <a href="{{ rou.get_absolute_url }}" class="nav-link">
+            <img src="{% if rou.image %} {{ rou.image.url }} {% else %} {% static 'img/route.jpg' %} {% endif %}" class="img-fluid rounded-start" alt="Card title">
+          </a>
+        </div>
+        <div class="col-md-8">
+          <div class="card-body">
+            <h5 class="card-title">
+              <a href="{{ rou.get_absolute_url }}" class="nav-link"><strong> {{ rou.title }} </strong></a>
+            </h5>
+            <a href="{{ rou.get_absolute_url }}" class="nav-link">
+              <p class="card-text">
+                {% if rou.description %} {{ rou.description }} {% else %} Велосипедный маршрут {% endif %}
+              </p>
+              <span>Кто осуществлял поездку: {{ rou.user }}</span>
+              <p class="card-text"><small class="text-muted">Статус: {% if rou.complition_status %} {{ rou.complition_status }} {% else %} Завершён {% endif %}</small></p>
+              <script type="text/javascript">
+                var datem = "{{ rou.created_at }}";
+                document.write('<p class="card-text"><small class="text-muted">Размещено: ', datem.slice(0,-5), '</small></p>')
+              </script>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% endfor %}
+
+{% endblock %}

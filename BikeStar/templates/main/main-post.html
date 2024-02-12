@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %} 
+Создать маршрут 
+{% endblock %}
+
+{% block content %}
+<ul class="nav nav-pills sticky-top bg-white nav-fill">
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="{% url 'main_page' %}">
+      <span style="font-weight: bold;">Главная</span>
+    </a>
+  </li>
+{% if not user.is_authenticated %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'register' %}">
+      <span style="font-weight: bold;">Регистрация</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'login' %}">
+      <span style="font-weight: bold;">Войти</span>
+    </a>
+  </li>
+  {% else %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'profile' %}">
+      <span style="font-weight: bold;">Профиль</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'logout' %}">
+      <span style="font-weight: bold;">Выйти</span>
+    </a>
+  </li>
+  {% endif %}
+  </ul>
+  <div class="container">
+    <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+      <div class="row mb-3">
+        <div class="col">
+          {{ form.as_p }}
+        <div class="col">
+          <button type="submit" class="btn btn-success">Принять</button>
+        </div>
+      </div>
+    </form>
+  </div>
+{% endblock %}

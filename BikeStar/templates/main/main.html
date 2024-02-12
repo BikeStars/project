@@ -1,0 +1,203 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+Маршрут
+{% endblock %}
+
+
+{% block content %}
+
+<ul class="nav nav-pills sticky-top bg-white nav-fill">
+  <li class="nav-item">
+    <a class="nav-link active" aria-current="page" href="{% url 'main_page' %}">
+      <span style="font-weight: bold;">Главная</span>
+    </a>
+  </li>
+  {% if not user.is_authenticated %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'register' %}">
+      <span style="font-weight: bold;">Регистрация</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'login' %}">
+      <span style="font-weight: bold;">Войти</span>
+    </a>
+  </li>
+  {% else %}
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'profile' %}">
+      <span style="font-weight: bold;">Профиль</span>
+    </a>
+  </li>
+  <li class="nav-item">
+    <a class="nav-link" href="{% url 'logout' %}">
+      <span style="font-weight: bold;">Выйти</span>
+    </a>
+  </li>
+  {% endif %}
+</ul>
+<div class="container" style="margin: 50px;">
+  <div class="display-2">
+    <span class="badge bg-primary">Маршрут пользователя {{ route.user }}</span>
+  </div>
+</div>
+<div class="col offset-2">
+  <div class="card mb-2" style="max-width: 1200px; margin-top: 20px;">
+    <div class="row g-0">
+      <div class="col-md-4">
+        <a href="#" class="nav-link">
+          <img src="{% if route.image %} {{ route.image.url }} {% else %} {% static 'img/user.webp' %} {% endif %}" class="img-fluid rounded-start" alt="Card title">
+        </a>
+      </div>
+      <div class="col">
+        <div class="card-body">
+          <h5 class="card-title">
+            <a href="#" class="nav-link"><strong>{{ route.title }}</strong></a>
+          </h5>
+          <p class="card-text">
+            {{ route.description }}
+          </p>
+          <span>Кто осуществлял поездку: {{ route.user }}</span>
+            <script type="text/javascript">
+              var datem = "{{ route.created_at }}";
+              document.write('<p class="card-text"><small class="text-muted">Размещено: ', datem.slice(0,-5), '</small></p>')
+            </script>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=scGchoW_O31kop2vpoPEdbQOFC-U9Farp4fK2ToTFhpgSKO9BUfDEUpXv8A2MFyB--n4yXNyccQRzakWtEyqZrb6Bb8aN2p3ebFgCgHsUlzwRIDaPkMLLX8LDF9qeIH8bSdWRXHKggIQ6UhtVJWFbqkH5c248AhtbisTIUvenKskt-fvl4Be1se9E7Kd_Cnq7G1WSik9shJsDik49XhjV3eLKVFyRbHrBdgbhetVxP42oMeYcVD2T4k0l6rQvU6nzGu7mbc4PYPXTAx-L1-xpTzzF7epYM6LUvRIq-Mli7Cr7pCb2CT_29VPo4iAf2wIcLZe9r6Rz2OqbVnBvuyL7hWA972Cm-N49WA8py3Cq3LL2UdHFEHdkT9jmq3K0R22WXAfrjqaA5FwgsIlJ_nPb0zTZw3P2XHgPfNKMp5kD3peDM_CL4bkLvpg3IhlPzmGunO-V-77YObOojlBXsABqjKU26UrgT8xdz71AbDlY1t-_PQKBVJksduYZ-HiXy-O3_5QvMaMpUxhuzNcGl3A0QmBMVNPcfNB2NV2PoDzxo6bQV0sr-O2Bous1yUxjgCt-RxVc6Gqyff_LpWjJvcpCS9h5IpF6xuX2gTqwY6rEFZqVaabEr5UcQN4DJUG601k8KuuAS6Nv67dHZlUt828s8cfO3V0ix7QGNCPMXY-ZVd-VE8LO3mVvTLUKcxy1WAxjwCkgE9hQ5d4ZDIVKbT4GGD8Alo7FInE2h2ccPAYR_Y4kB3Zy9H1vIv7ysZLsE3_rFC6vh76z5ghsZcWdk8Ae2EfYJyXU3eG2evwF2IvzKWR9H4iWA0yf3tiw8ngQ049T_bkLqaPsR2McjN5OEvaUUwYHCvyfoXNXiFIxSEzXAHZ7bRHCgWTvNQ06qtwzpJDGag4A4CoJG-qKrnhQLaVpgByP1GUwUEmNHK-0jPZAqaVYXSTWBioC6GyQJ-FUfqXCLHGuIcr2HKnjS919DFcd5HHZ1P9ZGAuNkeYUT3mMSs5CDolyazBZJ2MaSsWFWj8X-0g5BVJge94fly1obfrOiPUBWWPavp8HI0-_aUnmR0kNyje34YG846mfZrDXkM1Sv2usjPejNr7c_ALIiF0SqAxnSltJ6HCwCeGJCZM4i8w8sLXFX9icWVq0F-ySnT7orddABmIYDBygNfUj6ue6BCxQk3SipMiMBgWmMRDjOkgaylRZEQLDiU-RuUk3Ef6FLBZLach2igMvA6ljkRFjtbKJ4pUgXgnFycBis1TGu79OfcYdEdzzt6kCdmxGZG_Rkl7a0QniJ04a5ny_Qr0fYDd1t5_1rHI93Z4U4nl41qymm0RfH_NClMlkzwvGSHVRXbenoSFOjc1Rps9kNyOTqAfGbGaFuJ1FngqcFr6eupUsAjmLFFJSo-TCmGFHOCSgGv0Oz8SDPGqy3ardj53j5PbzuPUup3eXWag5oigEIRavUvBac1sr-Jp3AHS5-fVbKzULeJoNSG6NcIdCYSZ3IcoLn99Ur3wtoJbBGJx774h7wac4RoAnt7FVrTHC7_eTTUig4JYdqd7MC0hiXcXGmmYhkXc4iSUfALWeaQ88tfzWeSkcNj0sCKgmqMriAxsp1Ssl8XoK5n1rxOmxnnqkA" nonce="767a540b83a678c45d228bfbbc4fd894" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="https://gc.kis.v2.scr.kaspersky-labs.com/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9tYWlsLWF0dGFjaG1lbnQuZ29vZ2xldXNlcmNvbnRlbnQuY29tL2F0dGFjaG1lbnQvdS8wLz91aT0yJmlrPWI5ZmQzZGI0ZTcmYXR0aWQ9MC4xJnBlcm1tc2dpZD1tc2ctZjoxNzg4OTg2OTY0NjU3MjI0MTU3JnRoPTE4ZDNjMjJhNzgzMmI5ZGQmdmlldz1hdHQmZGlzcD1zYWZlJnNhZGRiYXQ9QU5HamRKOHJRZ2NFQ09FYXprY1EzYjNnTkFwY2ROeTBBOXptb0JzQ0FMTG5VY1JCVk9qRTlfWlVXWElUYnVhd25JYmFjeUZ6SndXWlI5UlNLMjVYVE55VTNzNDFxNWRhOHBTQ0pjYW9DMWJwMWpOcHpZOU5OXy1kMHdpZWl6aHZWQ3c1VzZQaUVMMkg3bUpxRVJodWFURTdKMXpuNXM1NGxnZkVWcXRJc0VkSXEwanFablQtRU9fTlJtakllWC1hNC1KTXN5TnBiTTFhanNxRS0yam1XdC1HSldpWHk2V1RjZ2JHcHFZTUx3S09pbDhsX08tSUNSLU4zTHRzbjBTeEo0Q2lGZEVFTkRaVmYxTFN2eXR2X0liVlB2bEJyY1NVT094T3VZOUdVSW1WdFB4cExxQ0pxOUFGdlNjSzlwR084T1pvLTFRby05dXRDTjZQV1VGZ2o5ZkRNb3JKd0Vta0hBTjU4dnl1ZTNkQUc5cU51ZWJ6andrLWhoSFF6SU5zbWpjX0lDSVh6UmpTblVwU3l0ZzVUTDg5Z1ozbWtkY05qak9hTHVsTjZmMVRSVmZLWHdsdlhpTGJGay0wMlVPMEU3bkRuRWN3UGVHb2REU190VUM1cWllZUUyRFBRV1o5SGx6bE5XUUlMRDhJUDktTzROVm1SNGktLWVMS1lkdFNhXzVGMW1CVExONVkxXzRGYlUyWnRzQ0tJRktiMFZJQWdRV25kbXhsRE5kVXNGM3FSY3VPcEtmOFdqYWFwZlFMQ0gwZmpCdmM3YUVmRUFYOGlTRTFCaVp2X2NFMWJQenNBWXU0b3dGVlQ3OVpiSkN2Q29seW9NbEtSSktpV0ZwZUJIbUJYbzlFWWxxSEtOTXM3N3VNa0paTHdKckhTUElPclQ3dnlFTDlIVnQ3RE9kcnhmYVlsMS10bmR5Nll4dUd2STZPMkxiZEs0clp3MjlPZ0dkc2FNclZUMFdvRWNfWkdlc2ZPQ3JKT3pjUjZGWWFabmpsV2FBWVVzbXlTLTJWc1UtbnJzMDdicXJYT0I5WVFpSGNEMDFXTG95bVZtQnNZUFdHWFViRG5UUkhpRFpaU283YXhEM0RJcGJMSHlJejZpMGZjTHdLMGthS1VONVVEc09UdmNncmx4MThMNXJIZVNnVFo1NVQxM3hBQ29TbDJOc29fNWZFQWs1SGpSM3hNQ3d0VmZndWNYdy15eXpXNEVvNGZlcC0taWpJM0E2SnVRWl9QZHpGTXF0WGFpTnVaVE9RYTV2TWt6T2Q2RDdpdkV4T1NXVEJqcncxeFVjRzBOdjFSUlZMLXA4dDhoZ2JNRHVPLVZCWlo5aGVMUG0zemNiR2lJZDZ1aUM4M204"/><style>
+            h1 {
+                color: rgba(39, 92, 114, 1);
+            }
+            .container {
+                display: flex;
+                gap: 10px
+            }
+            .rectangle-1 {
+                background-color: rgba(0, 98, 255, 1);
+                height: 40px;
+                width: 110px;
+            }
+            .rectangle-2 {
+                background-color: rgba(0, 98, 255, 1);
+                height: 40px;
+                width: 1110px;
+            }
+            table {
+                border-collapse: collapse;
+                border: 2px solid rgb(7, 7, 7);
+                letter-spacing: 1px;
+                font-size: 0.8rem;
+            }
+
+            td, th {
+                border: 1px solid rgb(168, 166, 166);
+                padding: 30px 30px;
+            }
+
+            td {
+                text-align: center;
+                font-size: 20px;
+                font-family: Trebuchet;
+            }
+           /* tr:nth-child(even) td {
+                background-color: rgb(250,250,250);
+            }
+
+            tr:nth-child(odd) td {
+                background-color: rgb(245,245,245);
+            }
+*/
+            
+            caption {
+                padding: 10px;
+            }   
+            tr, td {
+                font-family: Trebuchet
+            }
+            .table-1 {
+                tr {
+                    background-color: blue;
+                }
+            }
+            .item {
+                background-color: rgba(39, 92, 114, 0.4);
+                width: 50px;
+            }
+
+        </style>
+
+    </head>
+    <body>
+
+        <div class="container">
+            <div class="rectangle-1"></div>  
+            <h1><span style="font-family: Impact">BikeStat от ВелоStar</span></h1> 
+            <div class="rectangle-2"></div>  
+        </div>
+        <div class="container">
+            <table>
+                <tr>
+                    <td>дата</td>
+                    <td>дистанция</td>
+                    <td>расчетная сложность</td>
+                    <td>реальная сложность</td>
+                    <td>мин. пульс</td>
+                    <td>макс. пульс</td>
+                    <td>ср. пульс</td>
+                </tr>
+                <div class = "table-1">
+                    <tr>
+                        <td>
+                          <script type="text/javascript">
+                            var datem = "{{ route.created_at }}";
+                            document.write(datem.slice(0,-5))
+                          </script>
+                        </td>
+			<td>{% if route.distance %} {{ route.distance }} {% else %} 1.5 {% endif %} км </td>
+                        <td>
+                          {% if route.distance %}
+                          <script type="text/javascript">
+                            if ({{ route.distance }}<=2){
+                            document.write("лёгкий");}
+                            if ({{ route.distance }}<=4.5 & {{ route.distance }}>2){
+                            document.write("средний");}
+                            if ({{ route.distance }}>4.5){
+                            document.write("сложный");}
+                          </script>
+                          {% else %} лёгкий {% endif %}
+                        </td>
+                        <td>
+                          {% if route.pulsemid %}
+                          <script type="text/javascript">
+                            if ({{ route.pulsemid }}<=110){
+                            document.write("лёгкий");}
+                            if ({{ route.pulsemid }}<=130 & {{ route.pulsemid }}>110){
+                            document.write("средний");}
+                            if ({{ route.pulsemid }}>130){
+                            document.write("сложный");}
+                          </script> 
+                          {% else %} средний {% endif %}
+                        </td>
+                        <td>{% if rou.pulsemin %} {{ route.pulsemin }} {% else %} 61 {% endif %}</td>
+			<td>{% if rou.pulsemax %} {{ route.pulsemax }} {% else %} 169 {% endif %}</td>
+			<td>{% if rou.distance %} {{ route.pulsemid }} {% else %} 115 {% endif %}</td>
+                    </tr>
+                </div>
+            </table>
+         </div>
+    <p></p>
+    {% if route.id < 8 %}
+    <div align="center"><iframe src="{% static 'bicycle_route.html' %}" width="60%" height="360" frameborder="0"></iframe></div>
+    {% endif %}
+    {% if route.id > 7 %}
+    <div align="center"><iframe src="{% static 'new_bicycle_route.html' %}" width="60%" height="360" frameborder="0"></iframe></div>
+    {% endif %}
+    
+    
+</body>
+{% endblock %}
