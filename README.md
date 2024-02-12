@@ -1,5 +1,5 @@
 Для начала на устройстве, где происходит запуск, должен быть установлен Python,
-фреймворк Django и среда разработки. (У нас это Visual Studio Code)
+фреймворк Django и среда разработки (У нас это Visual Studio Code).
 Python, как и VS Code, можно установить на официальном сайте.
 Python - https://www.python.org/downloads/
 VS Code - https://code.visualstudio.com/download
